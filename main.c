@@ -83,7 +83,6 @@ void remove_pc() {
             printf("Invalid value!\n");
             break;
     }
-
 }
 void menu() {
     printf("Actions:\n"
@@ -117,5 +116,4 @@ int main() {
                 break;
         }
     }
-
 }
