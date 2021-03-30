@@ -29,7 +29,6 @@ struct list{
 };
 struct node *make_node(char* n,char* t,char* c,char* r,char* s,char* g,char* m,float p){
     struct node *temp = malloc(sizeof(struct node));
-    temp->next = malloc(sizeof(struct node));
     temp->next = NULL;
     temp->prev = NULL;
     temp->val = make_pc(n,t,c,r,s,g,m,p);
@@ -72,7 +71,7 @@ void append(struct list *l, struct node* temp){
         }
     }
 }
-void remove_by_position(struct list l,int index  ) {
+void remove_by_position( struct list l,int index ) {
     if( l.size != 0) {
         if ( index == 0 ) {
               l.first->next->prev = NULL;
