@@ -78,7 +78,7 @@ void append(struct list *l, struct node* temp){
             l->first->next = last;
             l->last->prev = l->first;
             l->size = l->size + 1;
-        } 
+        }
         else {
             struct node *new_last;
             new_last = temp;
@@ -130,7 +130,9 @@ void remove_by_position( struct list* l,int index ) {
         }
     } else printf("Database empty\n");
 }
-void remove_by_name ( struct list *l , char* a) {
+void remove_by_name ( struct list *l ) {
+    char *a = malloc(sizeof(char)*128);
+    gets(a);
     int check;
     struct node* p;
     struct node* k;
@@ -138,7 +140,7 @@ void remove_by_name ( struct list *l , char* a) {
     int i = 0;
     while ( p !=  NULL) {
         check = 0;
-        if ( strcmp ( p->val->name, a) == 0){ 
+        if ( strcmp ( p->val->name, a) == 0){
             k = p->next;
             printf("the pc named %s was deleted\n",p->val->name);
             remove_by_position(l,i);
@@ -197,8 +199,11 @@ void add_pc(struct list* db) {
     }
     free(name);free(type);free(cpu);free(ram);free(storage);free(gpu);free(mobo);
 }
-void menu() { 
+void menu() {
     printf("Choices:\n1. Add a pc to the database.\n");
+    printf("Choices:\n2. Remove pc.\n");
+    printf("Choices:\n3. Display.\n");
+    printf("Choices:\n0. Exit.\n");
 }
 int main() {
     struct list db = make_list();
@@ -210,12 +215,12 @@ int main() {
       switch ( choice ) {
         case 1:
         add_pc(&db);
+        break;
+        case 2:
+        remove_by_name(&db);
+        break;
+        case 3:
+        display(db);
       }
    }
-
-    /*display(db);
-    remove_by_position(&db,db.size-1);
-   */ display(db);
-    remove_by_name(&db,"a");
-    display(db);
 }
