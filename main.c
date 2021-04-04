@@ -130,15 +130,30 @@ void remove_by_position( struct list* l,int index ) {
         }
     } else printf("Database empty\n");
 }
-void remove_by_name ( struct list *l ) {
+void modify_pc (struct list *l) {
+struct node* p;
+    p = l->first;
+    p->val->name = " CHANGED KEKW";
+
+} 
+void remove_pc ( struct list *l ) {
     char *a = malloc(sizeof(char)*128);
-    gets(a);
+    float ll;
+    fflush(stdin);
+    int cts;
+    printf("Choose what field to remove a pc by:\n1.Name\n2.Type\n3.Cpu\n4.Ram size\n5.Storage size\n6.Gpu\n7.Motheboard\n8.Price\n");
+    scanf("%d",&cts);
     int check;
     struct node* p;
     struct node* k;
     p = l->first;
     int i = 0;
-    while ( p !=  NULL) {
+    switch (cts) {
+        case 1:
+        fflush(stdin);
+        printf("Choose the name of the pc to be deleted:\n");
+        gets(a);
+        while ( p !=  NULL) {
         check = 0;
         if ( strcmp ( p->val->name, a) == 0){
             k = p->next;
@@ -149,7 +164,137 @@ void remove_by_name ( struct list *l ) {
             i++;
             if ( check == 1) p = k;
             else p = p->next;
-    }
+        }
+        if (check == 0 ) printf("No pc with that field was found.\n");
+        break;
+        case 2:
+        fflush(stdin);
+        printf("Choose the type of the pc to be deleted:\n");
+        gets(a);
+        while ( p !=  NULL) {
+        check = 0;
+        if ( strcmp ( p->val->type, a) == 0){
+            k = p->next;
+            printf("the pc with the type %s was deleted\n",p->val->type);
+            remove_by_position(l,i);
+            check++;
+            }
+            i++;
+            if ( check == 1) p = k;
+            else p = p->next;
+        }
+        if (check == 0 ) printf("No pc with that field was found.\n");
+        break;
+        case 3:
+        fflush(stdin);
+        printf("Choose the cpu of the pc to be deleted:\n");
+        gets(a);
+        while ( p !=  NULL) {
+        check = 0;
+        if ( strcmp ( p->val->cpu, a) == 0){
+            k = p->next;
+            printf("the pc with the cpu %s was deleted\n",p->val->cpu);
+            remove_by_position(l,i);
+            check++;
+            }
+            i++;
+            if ( check == 1) p = k;
+            else p = p->next;
+        }
+        if (check == 0 ) printf("No pc with that field was found.\n");
+		break;
+        case 4:
+        fflush(stdin);
+        printf("Choose the ram of the pc to be deleted:\n");
+        gets(a);
+        while ( p !=  NULL) {
+        check = 0;
+        if ( strcmp ( p->val->ram, a) == 0){
+            k = p->next;
+            printf("the pc with the ram %s was deleted\n",p->val->ram);
+            remove_by_position(l,i);
+            check++;
+            }
+            i++;
+            if ( check == 1) p = k;
+            else p = p->next;
+        }
+        if (check == 0 ) printf("No pc with that field was found.\n");
+		break;
+        case 5:
+        fflush(stdin);
+        printf("Choose the storage of the pc to be deleted:\n");
+        gets(a);
+        while ( p !=  NULL) {
+        check = 0;
+        if ( strcmp ( p->val->storage, a) == 0){
+            k = p->next;
+            printf("the pc with the storage %s was deleted\n",p->val->storage);
+            remove_by_position(l,i);
+            check++;
+            }
+            i++;
+            if ( check == 1) p = k;
+            else p = p->next;
+        }
+        if (check == 0 ) printf("No pc with that field was found.\n");
+		break;
+        case 6:
+        fflush(stdin);
+        printf("Choose the gpu of the pc to be deleted:\n");
+        gets(a);
+        while ( p !=  NULL) {
+        check = 0;
+        if ( strcmp ( p->val->gpu, a) == 0){
+            k = p->next;
+            printf("the pc with the gpu %s was deleted\n",p->val->gpu);
+            remove_by_position(l,i);
+            check++;
+            }
+            i++;
+            if ( check == 1) p = k;
+            else p = p->next;
+        }
+        if (check == 0 ) printf("No pc with that field was found.\n");
+		break;
+        case 7:
+        fflush(stdin);
+        printf("Choose the motherboard of the pc to be deleted:\n");
+        gets(a);
+        while ( p !=  NULL) {
+        check = 0;
+        if ( strcmp ( p->val->motherboard, a) == 0){
+            k = p->next;
+            printf("the pc with the motherboard %s was deleted\n",p->val->motherboard);
+            remove_by_position(l,i);
+            check++;
+            }
+            i++;
+            if ( check == 1) p = k;
+            else p = p->next;
+        }
+        if (check == 0 ) printf("No pc with that field was found.\n");
+		break;
+        case 8:
+        fflush(stdin);
+        printf("Choose the price of the pc to be deleted:\n");
+        scanf("%d",&ll);
+        while ( p !=  NULL) {
+        check = 0;
+        if ( p->val->price == ll){
+            k = p->next;
+            printf("the pc with the price %.2f was deleted\n",p->val->price);
+            remove_by_position(l,i);
+            check++;
+            }
+            i++;
+            if ( check == 1) p = k;
+            else p = p->next;
+        }
+        if (check == 0 ) printf("No pc with that field was found.\n");
+		break;
+        }
+    
 }
 void display(struct list l){
     if (l.size!=0) {
@@ -217,7 +362,7 @@ int main() {
         add_pc(&db);
         break;
         case 2:
-        remove_by_name(&db);
+        remove_pc(&db);
         break;
         case 3:
         display(db);
