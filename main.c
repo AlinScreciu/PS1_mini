@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <conio.h>
 FILE *fp;
 struct pc {
     char* type;char* name;char* cpu;char* ram;char* storage;char* gpu;char* motherboard;
@@ -102,7 +103,7 @@ void copy_node (struct node* a, struct node* b) {
     b->prev = a->prev;
     b->val = a->val;
 }
-void display(struct list l){
+void display(struct list l, int chk  ){
     if (l.size!=0) {
         int i = 1;
         struct node *p;
@@ -116,7 +117,12 @@ void display(struct list l){
             i++;
         }
     }
-    else printf("empty\n");
+    else printf("Database empty\n");
+    if ( chk == 1 ) {printf("Press a key to continue\n");
+    getch();
+    fflush(stdin);}
+
+
 }
 void write(struct list l) {
     fp  = fopen("db.txt","a");
@@ -125,7 +131,7 @@ void write(struct list l) {
         struct node *p;
         p = l.first;
         while ( p != NULL ) {
-            fprintf(fp,"%s ,%s ,%s ,%s ,%s ,%s ,%s ,%.2f ,\n",p->val->name,p->val->type,p->val->cpu,p->val->ram, // do not like this
+            fprintf(fp,"%s,%s,%s,%s,%s,%s,%s,%.2f,\n",p->val->name,p->val->type,p->val->cpu,p->val->ram, // do not like this
             p->val->storage,p->val->gpu,p->val->motherboard,p->val->price); // but too lazy to write 2 printfs
             fclose(fp);
             p = p->next;
@@ -140,7 +146,7 @@ void read(struct list *l) {
   int chk = -1;
   while(fgets(buffer,10*sizeof(buffer),fp)) {
       struct node* temp = empty_node();
-      chk = sscanf(buffer,"%127[a-zA-Z0-9 ], %127[a-zA-Z0-9 ] ,%127[a-zA-Z0-9 ] ,%127[a-zA-Z0-9 ] ,%127[a-zA-Z0-9 ] ,%127[a-zA-Z0-9 ] ,%127[a-zA-Z0-9 ] ,%f ,\n",temp->val->name,temp->val->type,temp->val->cpu,temp->val->ram,
+      chk = sscanf(buffer,"%127[a-zA-Z0-9- ],%127[a-zA-Z0-9- ],%127[a-zA-Z0-9- ],%127[a-zA-Z0-9- ],%127[a-zA-Z0-9- ],%127[a-zA-Z0-9- ],%127[a-zA-Z0-9- ],%f,\n",temp->val->name,temp->val->type,temp->val->cpu,temp->val->ram,
       temp->val->storage,temp->val->gpu,temp->val->motherboard,&temp->val->price);
       append(l,temp);
   } 
@@ -192,15 +198,14 @@ void remove_by_position( struct list* l,int index ,int checker) {
     } else printf("Database empty\n");
 }
 void modify_pc (struct list *l) {
-    display(*l);
-    fflush(stdin);
     printf("Choose the pc you want to modify by it's index:\n");
+    display(*l,0);
+    fflush(stdin);
     int index;
-
     scanf("%d",&index);
     while ( index > l->size ) {
       printf("Wrong index, choose again.\n");
-      display(*l);
+      display(*l,0);
       fflush(stdin);
       scanf("%d",&index);
     }
@@ -272,6 +277,7 @@ void remove_pc ( struct list *l ) {
     float ll;
     fflush(stdin);
     int cts;
+    display(*l,0);
     printf("Choose what field to remove a pc by:\n1.Name\n2.Type\n3.Cpu\n4.Ram size\n5.Storage size\n6.Gpu\n7.Motheboard\n8.Price\n");
     scanf("%d",&cts);
     int check;
@@ -462,47 +468,55 @@ void add_pc(struct list* db) {
     free(name);free(type);free(cpu);free(ram);free(storage);free(gpu);free(mobo);
 }
 void menu() {
-    printf("Choices:\n1. Add a pc to the database.\n");
-    printf("Choices:\n2. Remove pc.\n");
-    printf("Choices:\n3. Remove pc by index.\n");
-    printf("Choices:\n4. Update a pc.\n");
-    printf("Choices:\n5. Display.\n");
-    printf("Choices:\n6. Load database from file.\n");
-    printf("Choices:\n7. Write database to file.\n");
-    printf("Choices:\n0. Exit.\n");
+    printf("Choices: \n");
+    printf("1. Add a pc to the database.\n");
+    printf("2. Remove pc.\n");
+    printf("3. Remove pc by index.\n");
+    printf("4. Update a pc.\n");
+    printf("5. Display.\n");
+    printf("6. Load database from file.\n");
+    printf("7. Write database to file.\n");
+    printf("0. Exit.\n");
 }
 int main() {
     struct list db = make_list();
     int choice = 1;
     int to_del;
     while ( choice != 0 ) {
-      fflush(stdin);
       menu();
+      fflush(stdin);
       scanf("%d",&choice);
       switch ( choice ) {
         case 1:
         add_pc(&db);
+        system("cls");
         break;
         case 2:
         remove_pc(&db);
+        system("cls");
         break;
         case 3:
         fflush(stdin);
         printf("Index to be deleted:\n");
         scanf("%d",&to_del);
         remove_by_position(&db,to_del,1);
+        system("cls");
         break;
         case 4:
         modify_pc(&db);
+        system("cls");        
         break;
         case 5:
-        display(db);
+        display(db,1);
+        system("cls");
         break;
         case 6:
         read(&db);
+        system("cls");
         break;
         case 7:
         write(db);
+        system("cls");
         break;
       }
    }
