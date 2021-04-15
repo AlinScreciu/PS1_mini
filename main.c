@@ -98,11 +98,6 @@ void append(struct list *l, struct node* temp){
         }
     }
 }
-void copy_node (struct node* a, struct node* b) {
-    b->next = a->next;
-    b->prev = a->prev;
-    b->val = a->val;
-}
 void display(struct list l, int chk  ){
     if (l.size!=0) {
         int i = 1;
@@ -119,10 +114,9 @@ void display(struct list l, int chk  ){
     }
     else printf("Database empty\n");
     if ( chk == 1 ) {printf("Press a key to continue\n");
-    getch();
-    fflush(stdin);}
-
-
+    //getch();
+  //fflush(stdin);
+}
 }
 void write(struct list l) {
     fp  = fopen("db.txt","a");
@@ -144,12 +138,23 @@ void read(struct list *l) {
   char* buffer = malloc(9 * 128 * sizeof(char));
   fp =  fopen("db.txt","r");
   int chk = -1;
+  int line = 1;
   while(fgets(buffer,10*sizeof(buffer),fp)) {
+      size_t count = 0;
+      char* prot = malloc(sizeof(buffer));
+      strcpy(prot,buffer);
+      while(*prot != '\0'){
+          count += *prot++ == ',';
+      }
+      if(count == 8){
       struct node* temp = empty_node();
       chk = sscanf(buffer,"%127[a-zA-Z0-9- ],%127[a-zA-Z0-9- ],%127[a-zA-Z0-9- ],%127[a-zA-Z0-9- ],%127[a-zA-Z0-9- ],%127[a-zA-Z0-9- ],%127[a-zA-Z0-9- ],%f,\n",temp->val->name,temp->val->type,temp->val->cpu,temp->val->ram,
       temp->val->storage,temp->val->gpu,temp->val->motherboard,&temp->val->price);
       append(l,temp);
-  } 
+      } else {
+          printf("On line %d data is invalid\n",line);
+      }
+  }
   if(chk == -1) printf("\nDatabase file empty");
 }
 void remove_by_position( struct list* l,int index ,int checker) {
@@ -489,34 +494,34 @@ int main() {
       switch ( choice ) {
         case 1:
         add_pc(&db);
-        system("cls");
+        
         break;
         case 2:
         remove_pc(&db);
-        system("cls");
+        
         break;
         case 3:
         fflush(stdin);
         printf("Index to be deleted:\n");
         scanf("%d",&to_del);
         remove_by_position(&db,to_del,1);
-        system("cls");
+        
         break;
         case 4:
         modify_pc(&db);
-        system("cls");        
+        
         break;
         case 5:
         display(db,1);
-        system("cls");
+        
         break;
         case 6:
         read(&db);
-        system("cls");
+        
         break;
         case 7:
         write(db);
-        system("cls");
+        
         break;
       }
    }
