@@ -166,7 +166,7 @@ void read(struct list *l) {
     }
     if(chk == -1) printf("\nDatabase file empty");
 }
-void remove_by_position( struct list* l,int index,int checker) {
+void remove_by_position( struct list* l ,int index,int checker) {
     if( l->size != 0 && l->size != 1) {
         if ( index == 0 ) {
             l->first->next->prev = NULL;
