@@ -48,6 +48,7 @@ struct node *empty_node ( ) {
     temp->val = make_pc();
     return temp;
 }
+void write(struct list l);
 struct node *make_node(char* n,char* t,char* c,char* r,char* s,char* g,char* m,float p){
     struct node *temp = malloc(sizeof(struct node));
     temp->next = NULL;
@@ -72,6 +73,7 @@ struct list make_list(){
     return l;
 }
 void append(struct list *l, struct node* temp){
+
     if (l->size == 0) {
         struct node *first;
         first = temp;
@@ -106,7 +108,7 @@ void display(struct list l, int chk  ){
         p->val = l.first->val;
         p->next = l.first->next;
         while ( p != NULL ) {
-            printf("%d. %s %s %s %s %s %s %s %.2f\n",i,p->val->name,p->val->type,p->val->cpu,p->val->ram, // do not like this
+            printf("%d. %s , %s , %s , %s , %s , %s , %s , %.2f ,\n",i,p->val->name,p->val->type,p->val->cpu,p->val->ram, // do not like this
                    p->val->storage,p->val->gpu,p->val->motherboard,p->val->price); // but too lazy to write 2 printfs
             p = p->next;
             i++;
@@ -119,7 +121,7 @@ void display(struct list l, int chk  ){
 }
 }
 void write(struct list l) {
-    fp  = fopen("db.txt","a");
+    fp  = fopen("db.txt","w");
     if (l.size!=0) {
         int i = 1;
         struct node *p;
@@ -127,12 +129,12 @@ void write(struct list l) {
         while ( p != NULL ) {
             fprintf(fp,"%s,%s,%s,%s,%s,%s,%s,%.2f,\n",p->val->name,p->val->type,p->val->cpu,p->val->ram, // do not like this
             p->val->storage,p->val->gpu,p->val->motherboard,p->val->price); // but too lazy to write 2 printfs
-            fclose(fp);
             p = p->next;
             i++;
         }
     }
     else printf("Database is empty, nothing to write into a file.\n");
+    fclose(fp);
 }
 void read(struct list *l) {
   char* buffer = malloc(9 * 128 * sizeof(char));
@@ -144,7 +146,7 @@ void read(struct list *l) {
       char* prot = malloc(sizeof(buffer));
       strcpy(prot,buffer);
       while(*prot != '\0'){
-          count += *prot++ == ',';
+         count += *prot++ == ',';
       }
       if(count == 8){
       struct node* temp = empty_node();
@@ -153,7 +155,7 @@ void read(struct list *l) {
       append(l,temp);
       } else {
           printf("On line %d data is invalid\n",line);
-      }
+     }
   }
   if(chk == -1) printf("\nDatabase file empty");
 }
@@ -420,7 +422,7 @@ void remove_pc ( struct list *l ) {
         case 8:
         fflush(stdin);
         printf("Choose the price of the pc to be deleted:\n");
-        scanf("%d",&ll);
+        scanf("%f5",&ll);
         while ( p !=  NULL) {
         check = 0;
         if ( p->val->price == ll){
@@ -435,7 +437,7 @@ void remove_pc ( struct list *l ) {
         }
         if (check == 0 ) printf("No pc with that field was found.\n");
 		break;
-        }
+        } 
 }
 void add_pc(struct list* db) {
     char *name = malloc(128*sizeof(char));
@@ -465,6 +467,7 @@ void add_pc(struct list* db) {
         printf("Price:\n");
         scanf("%f",&p);
         append(db,make_node(name,type,cpu,ram,storage,gpu,mobo,p));
+        write(*db);
         printf("0 to stop, 1 to add another pc\n");
         int a = 0;
         scanf("%d",&a);
@@ -480,7 +483,6 @@ void menu() {
     printf("4. Update a pc.\n");
     printf("5. Display.\n");
     printf("6. Load database from file.\n");
-    printf("7. Write database to file.\n");
     printf("0. Exit.\n");
 }
 int main() {
@@ -494,34 +496,33 @@ int main() {
       switch ( choice ) {
         case 1:
         add_pc(&db);
-        
+        write(db);
         break;
         case 2:
         remove_pc(&db);
-        
+        write(db);
         break;
         case 3:
         fflush(stdin);
+        display(db,0);
         printf("Index to be deleted:\n");
         scanf("%d",&to_del);
         remove_by_position(&db,to_del,1);
-        
+        write(db);
         break;
         case 4:
         modify_pc(&db);
-        
+        write(db);
         break;
         case 5:
         display(db,1);
-        
         break;
         case 6:
         read(&db);
-        
         break;
-        case 7:
-        write(db);
-        
+        default:
+        printf("Invalid choice!\n");
+        menu();
         break;
       }
    }
