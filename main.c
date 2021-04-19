@@ -59,8 +59,26 @@ struct node *empty_node ( )
     temp->prev = NULL;
     temp->val = make_pc();
     return temp;
+};
+void write(struct list l)
+{
+    fp = fopen("db.txt","w");
+    if (l.size!=0)
+    {
+        int i = 1;
+        struct node *p;
+        p = l.first;
+        while ( p != NULL )
+        {
+            fprintf(fp,"%s,%s,%s,%s,%s,%s,%s,%.2f,\n",p->val->name,p->val->type,p->val->cpu,p->val->ram, // do not like this
+                    p->val->storage,p->val->gpu,p->val->motherboard,p->val->price); // but too lazy to write 2 printfs
+            p = p->next;
+            i++;
+        }
+    }
+    else printf("Database is empty, nothing to write into a file.\n");
+    fclose(fp);
 }
-void write(struct list l);
 struct node *make_node(char* n,char* t,char* c,char* r,char* s,char* g,char* m,float p)
 {
     struct node *temp = malloc(sizeof(struct node));
@@ -141,25 +159,7 @@ void display(struct list l, int chk  )
         //fflush(stdin);
     }
 }
-void write(struct list l)
-{
-    fp  = fopen("db.txt","w");
-    if (l.size!=0)
-    {
-        int i = 1;
-        struct node *p;
-        p = l.first;
-        while ( p != NULL )
-        {
-            fprintf(fp,"%s,%s,%s,%s,%s,%s,%s,%.2f,\n",p->val->name,p->val->type,p->val->cpu,p->val->ram, // do not like this
-                    p->val->storage,p->val->gpu,p->val->motherboard,p->val->price); // but too lazy to write 2 printfs
-            p = p->next;
-            i++;
-        }
-    }
-    else printf("Database is empty, nothing to write into a file.\n");
-    fclose(fp);
-}
+
 void read(struct list *l)
 {
     char* buffer = malloc(9 * 128 * sizeof(char));
@@ -185,7 +185,7 @@ void read(struct list *l)
             printf("On line %d data is invalid\n",line);
         }
     }
-    if(chk == -1) printf("\nDatabase file empty");
+    if(chk == -1) printf("Database file empty\n");
 }
 void remove_by_position( struct list* l,int index,int checker)
 {
